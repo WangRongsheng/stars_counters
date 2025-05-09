@@ -1,0 +1,534 @@
+<html>
+<head>
+    <title>Github Stars 计数</title>
+    <script src="star_counter.js"></script>
+    <script>
+        function func_1() {
+            document.getElementById("demo").innerHTML = 'If not print for seconds, please refresh';
+            github_id = document.getElementById("user").value;
+            let result = cal_github_star(github_id);
+            document.getElementById("demo").innerHTML = result;
+            
+            // 如果查询成功，启动烟花特效
+            if (result.indexOf("Total") > -1) {
+                startFireworks();
+                
+                // 高亮Total列
+                setTimeout(function() {
+                    const demoContent = document.getElementById("demo");
+                    demoContent.innerHTML = demoContent.innerHTML.replace(
+                        /Total: (\d+)/g, 
+                        'Total: <span class="highlight">$1</span>'
+                    );
+                }, 100);
+            }
+        }
+        
+        // 烟花特效函数
+        function startFireworks() {
+            const fireworks = document.getElementById("fireworks");
+            fireworks.style.display = "block";
+            
+            // 30秒后关闭烟花
+            setTimeout(function() {
+                fireworks.style.display = "none";
+            }, 30000);
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f6f8fa;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 200px;
+        }
+        button {
+            background-color: #42b983;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3aa876;
+        }
+        #demo {
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        a {
+            color: #42b983;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 高亮Total的样式 */
+        .highlight {
+            color: #ff5722;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        /* 烟花特效的样式 */
+        #fireworks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+            background: rgba(0, 0, 0, 0.5); /* 调整背景透明度，使烟花效果更明显 */
+        }
+        
+        .pyro {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .pyro > .before, .pyro > .after {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: -70px -115.67px #ff4444, 56px -107.67px #ffdd00, 
+                       38px 31.33px #ff8800, -57px -74.67px #ff00d0, 
+                       -31px -76.67px #ff006a, -39px -66.67px #ff001e, 
+                       20px -122.67px #ff00d5, -89px -96.67px #ff0037, 
+                       65px 8.33px #ff8c00, 32px -116.67px #00ffa2;  /* 修改烟花颜色使其更鲜艳 */
+            animation: 1s bang ease-out infinite backwards, 
+                     1s gravity ease-in infinite backwards, 
+                     5s position linear infinite backwards;
+        }
+        .pyro {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .pyro > .before, .pyro > .after {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+            animation: 1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards;
+        }
+        .pyro > .after {
+            animation-delay: 1.25s, 1.25s, 1.25s;
+            animation-duration: 1.25s, 1.25s, 6.25s;
+        }
+        @keyframes bang {
+            to {
+                box-shadow: -70px -115.67px #00ff84, 56px -107.67px #ffd000, 38px 31.33px #ff8800, -57px -74.67px #ff00d0, -31px -76.67px #ff006a, -39px -66.67px #ff001e, 20px -122.67px #ff00d5, -89px -96.67px #ff0037, 65px 8.33px #00ff8c, 32px -116.67px #00ffa2, 89px -94.67px #002bff, 16px -118.67px #ff00fb, 38px -70.67px #00ffcc, 81px -55.67px #ff0040, 62px 27.33px #0066ff, 15px 76.33px #ff4000, -45px 1.33px #ff00a6, -72px -59.67px #ff0037, 11px 53.33px #00ff3c, 69px 37.33px #ff0037;
+            }
+        }
+        @keyframes gravity {
+            to {
+                transform: translateY(200px);
+                opacity: 0;
+            }
+        }
+        @keyframes position {
+            0%, 19.9% {
+                margin-top: 10%;
+                margin-left: 40%;
+            }
+            20%, 39.9% {
+                margin-top: 40%;
+                margin-left: 30%;
+            }
+            40%, 59.9% {
+                margin-top: 20%;
+                margin-left: 70%;
+            }
+            60%, 79.9% {
+                margin-top: 30%;
+                margin-left: 20%;
+            }
+            80%, 99.9% {
+                margin-top: 30%;
+                margin-left: 80%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>GitHub Star 计数</h1>
+        <div class="input-group">
+            <label for="user">输入 GitHub 用户名:</label>
+            <input name="user" value="" type="text" id="user">
+            <button onClick="func_1()">计算</button>
+        </div>
+
+        <p id="demo"></p>
+        
+        <div id="fireworks">
+            <div class="pyro">
+                <div class="before"></div>
+                <div class="after"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+	(function(name, factory) {
+		if (typeof window === "object") {
+			window[name] = factory()
+		}
+	})("Ribbons", function() {
+		var _w = window,
+			_b = document.body,
+			_d = document.documentElement;
+		var random = function() {
+				if (arguments.length === 1) {
+					if (Array.isArray(arguments[0])) {
+						var index = Math.round(random(0, arguments[0].length - 1));
+						return arguments[0][index]
+					}
+					return random(0, arguments[0])
+				} else if (arguments.length === 2) {
+					return Math.random() * (arguments[1] - arguments[0]) + arguments[0]
+				}
+				return 0
+			};
+		var screenInfo = function(e) {
+				var width = Math.max(0, _w.innerWidth || _d.clientWidth || _b.clientWidth || 0),
+					height = Math.max(0, _w.innerHeight || _d.clientHeight || _b.clientHeight || 0),
+					scrollx = Math.max(0, _w.pageXOffset || _d.scrollLeft || _b.scrollLeft || 0) - (_d.clientLeft || 0),
+					scrolly = Math.max(0, _w.pageYOffset || _d.scrollTop || _b.scrollTop || 0) - (_d.clientTop || 0);
+				return {
+					width: width,
+					height: height,
+					ratio: width / height,
+					centerx: width / 2,
+					centery: height / 2,
+					scrollx: scrollx,
+					scrolly: scrolly
+				}
+			};
+		var mouseInfo = function(e) {
+				var screen = screenInfo(e),
+					mousex = e ? Math.max(0, e.pageX || e.clientX || 0) : 0,
+					mousey = e ? Math.max(0, e.pageY || e.clientY || 0) : 0;
+				return {
+					mousex: mousex,
+					mousey: mousey,
+					centerx: mousex - screen.width / 2,
+					centery: mousey - screen.height / 2
+				}
+			};
+		var Point = function(x, y) {
+				this.x = 0;
+				this.y = 0;
+				this.set(x, y)
+			};
+		Point.prototype = {
+			constructor: Point,
+			set: function(x, y) {
+				this.x = x || 0;
+				this.y = y || 0
+			},
+			copy: function(point) {
+				this.x = point.x || 0;
+				this.y = point.y || 0;
+				return this
+			},
+			multiply: function(x, y) {
+				this.x *= x || 1;
+				this.y *= y || 1;
+				return this
+			},
+			divide: function(x, y) {
+				this.x /= x || 1;
+				this.y /= y || 1;
+				return this
+			},
+			add: function(x, y) {
+				this.x += x || 0;
+				this.y += y || 0;
+				return this
+			},
+			subtract: function(x, y) {
+				this.x -= x || 0;
+				this.y -= y || 0;
+				return this
+			},
+			clampX: function(min, max) {
+				this.x = Math.max(min, Math.min(this.x, max));
+				return this
+			},
+			clampY: function(min, max) {
+				this.y = Math.max(min, Math.min(this.y, max));
+				return this
+			},
+			flipX: function() {
+				this.x *= -1;
+				return this
+			},
+			flipY: function() {
+				this.y *= -1;
+				return this
+			}
+		};
+		var Factory = function(options) {
+				this._canvas = null;
+				this._context = null;
+				this._sto = null;
+				this._width = 0;
+				this._height = 0;
+				this._scroll = 0;
+				this._ribbons = [];
+				this._options = {
+					colorSaturation: "80%",
+					colorBrightness: "60%",
+					colorAlpha: 0.65,
+					colorCycleSpeed: 6,
+					verticalPosition: "center",
+					horizontalSpeed: 150,
+					ribbonCount: 5,
+					strokeSize: 5,
+					parallaxAmount: -0.5,
+					animateSections: true
+				};
+				this._onDraw = this._onDraw.bind(this);
+				this._onResize = this._onResize.bind(this);
+				this._onScroll = this._onScroll.bind(this);
+				this.setOptions(options);
+				this.init()
+			};
+		Factory.prototype = {
+			constructor: Factory,
+			setOptions: function(options) {
+				if (typeof options === "object") {
+					for (var key in options) {
+						if (options.hasOwnProperty(key)) {
+							this._options[key] = options[key]
+						}
+					}
+				}
+			},
+			init: function() {
+				try {
+					this._canvas = document.createElement("canvas");
+					this._canvas.style["display"] = "block";
+					this._canvas.style["position"] = "fixed";
+					this._canvas.style["margin"] = "0";
+					this._canvas.style["padding"] = "0";
+					this._canvas.style["border"] = "0";
+					this._canvas.style["outline"] = "0";
+					this._canvas.style["left"] = "0";
+					this._canvas.style["top"] = "0";
+					this._canvas.style["width"] = "100%";
+					this._canvas.style["height"] = "100%";
+					this._canvas.style["z-index"] = "-1";
+					this._onResize();
+					this._context = this._canvas.getContext("2d");
+					this._context.clearRect(0, 0, this._width, this._height);
+					this._context.globalAlpha = this._options.colorAlpha;
+					window.addEventListener("resize", this._onResize);
+					window.addEventListener("scroll", this._onScroll);
+					document.body.appendChild(this._canvas)
+				} catch (e) {
+					console.warn("Canvas Context Error: " + e.toString());
+					return
+				}
+				this._onDraw()
+			},
+			addRibbon: function() {
+				var dir = Math.round(random(1, 9)) > 5 ? "right" : "left",
+					stop = 1000,
+					hide = 200,
+					min = 0 - hide,
+					max = this._width + hide,
+					movex = 0,
+					movey = 0,
+					startx = dir === "right" ? min : max,
+					starty = Math.round(random(0, this._height));
+				if (/^(top|min)$/i.test(this._options.verticalPosition)) {
+					starty = 0 + hide
+				} else if (/^(middle|center)$/i.test(this._options.verticalPosition)) {
+					starty = this._height / 2
+				} else if (/^(bottom|max)$/i.test(this._options.verticalPosition)) {
+					starty = this._height - hide
+				}
+				var ribbon = [],
+					point1 = new Point(startx, starty),
+					point2 = new Point(startx, starty),
+					point3 = null,
+					color = Math.round(random(0, 360)),
+					delay = 0;
+				while (true) {
+					if (stop <= 0) break;
+					stop--;
+					movex = Math.round((Math.random() * 1 - 0.2) * this._options.horizontalSpeed);
+					movey = Math.round((Math.random() * 1 - 0.5) * (this._height * 0.25));
+					point3 = new Point();
+					point3.copy(point2);
+					if (dir === "right") {
+						point3.add(movex, movey);
+						if (point2.x >= max) break
+					} else if (dir === "left") {
+						point3.subtract(movex, movey);
+						if (point2.x <= min) break
+					}
+					ribbon.push({
+						point1: new Point(point1.x, point1.y),
+						point2: new Point(point2.x, point2.y),
+						point3: point3,
+						color: color,
+						delay: delay,
+						dir: dir,
+						alpha: 0,
+						phase: 0
+					});
+					point1.copy(point2);
+					point2.copy(point3);
+					delay += 4;
+					color += this._options.colorCycleSpeed
+				}
+				this._ribbons.push(ribbon)
+			},
+			_drawRibbonSection: function(section) {
+				if (section) {
+					if (section.phase >= 1 && section.alpha <= 0) {
+						return true
+					}
+					if (section.delay <= 0) {
+						section.phase += 0.02;
+						section.alpha = Math.sin(section.phase) * 1;
+						section.alpha = section.alpha <= 0 ? 0 : section.alpha;
+						section.alpha = section.alpha >= 1 ? 1 : section.alpha;
+						if (this._options.animateSections) {
+							var mod = Math.sin(1 + section.phase * Math.PI / 2) * 0.1;
+							if (section.dir === "right") {
+								section.point1.add(mod, 0);
+								section.point2.add(mod, 0);
+								section.point3.add(mod, 0)
+							} else {
+								section.point1.subtract(mod, 0);
+								section.point2.subtract(mod, 0);
+								section.point3.subtract(mod, 0)
+							}
+							section.point1.add(0, mod);
+							section.point2.add(0, mod);
+							section.point3.add(0, mod)
+						}
+					} else {
+						section.delay -= 0.5
+					}
+					var s = this._options.colorSaturation,
+						l = this._options.colorBrightness,
+						c = "hsla(" + section.color + ", " + s + ", " + l + ", " + section.alpha + " )";
+					this._context.save();
+					if (this._options.parallaxAmount !== 0) {
+						this._context.translate(0, this._scroll * this._options.parallaxAmount)
+					}
+					this._context.beginPath();
+					this._context.moveTo(section.point1.x, section.point1.y);
+					this._context.lineTo(section.point2.x, section.point2.y);
+					this._context.lineTo(section.point3.x, section.point3.y);
+					this._context.fillStyle = c;
+					this._context.fill();
+					if (this._options.strokeSize > 0) {
+						this._context.lineWidth = this._options.strokeSize;
+						this._context.strokeStyle = c;
+						this._context.lineCap = "round";
+						this._context.stroke()
+					}
+					this._context.restore()
+				}
+				return false
+			},
+			_onDraw: function() {
+				for (var i = 0, t = this._ribbons.length; i < t; ++i) {
+					if (!this._ribbons[i]) {
+						this._ribbons.splice(i, 1)
+					}
+				}
+				this._context.clearRect(0, 0, this._width, this._height);
+				for (var a = 0; a < this._ribbons.length; ++a) {
+					var ribbon = this._ribbons[a],
+						numSections = ribbon.length,
+						numDone = 0;
+					for (var b = 0; b < numSections; ++b) {
+						if (this._drawRibbonSection(ribbon[b])) {
+							numDone++
+						}
+					}
+					if (numDone >= numSections) {
+						this._ribbons[a] = null
+					}
+				}
+				if (this._ribbons.length < this._options.ribbonCount) {
+					this.addRibbon()
+				}
+				requestAnimationFrame(this._onDraw)
+			},
+			_onResize: function(e) {
+				var screen = screenInfo(e);
+				this._width = screen.width;
+				this._height = screen.height;
+				if (this._canvas) {
+					this._canvas.width = this._width;
+					this._canvas.height = this._height;
+					if (this._context) {
+						this._context.globalAlpha = this._options.colorAlpha
+					}
+				}
+			},
+			_onScroll: function(e) {
+				var screen = screenInfo(e);
+				this._scroll = screen.scrolly
+			}
+		};
+		return Factory
+	});
+	new Ribbons({
+		colorSaturation: "60%",
+		colorBrightness: "50%",
+		colorAlpha: 0.5,
+		colorCycleSpeed: 5,
+		verticalPosition: "random",
+		horizontalSpeed: 200,
+		ribbonCount: 3,
+		strokeSize: 0,
+		parallaxAmount: -0.2,
+		animateSections: true
+	});
+</script>
+
+
+</html>
